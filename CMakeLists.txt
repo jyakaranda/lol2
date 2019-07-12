@@ -21,6 +21,64 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+find_package(builtin_interfaces REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(tf2_msgs REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+find_package(pcl_conversions 2.0 REQUIRED)
+find_package(alego2_msgs REQUIRED)
+find_package(alego2 REQUIRED)
+
+find_package(PCL REQUIRED)
+find_package(Eigen3 REQUIRED)
+find_package(Ceres REQUIRED)
+
+include_directories(include
+  ${EIGEN3_INCLUDE_DIRS}
+  ${CERES_INCLUDE_DIRS}
+  ${tf2_INCLUDE_DIRS}
+  ${tf2_ros_INCLUDE_DIRS}
+)
+
+add_library(lol_localization src/lolLocalization.cpp)
+ament_target_dependencies(lol_localization 
+  rclcpp
+  tf2_ros
+  tf2
+  tf2_geometry_msgs
+  sensor_msgs
+  nav_msgs
+  geometry_msgs
+  tf2_msgs
+  std_srvs
+  pcl_conversions
+  alego2
+  alego2_msgs
+)
+target_link_libraries(lol_localization ${Boost_SYSTEM_LIBRARY} ${PCL_LIBRARIES} ${CERES_LIBRARIES}
+  ${tf2_LIBRARIES}
+)
+
+add_executable(lol src/main.cpp)
+target_link_libraries(lol lol_localization)
+
+install(TARGETS
+  lol
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
