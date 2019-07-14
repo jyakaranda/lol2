@@ -381,7 +381,6 @@ void LolLocalization::run(std::shared_ptr<LolLocalization> lol)
 
   while (rclcpp::ok())
   {
-    std::cout << "1234" << std::endl;
     rate.sleep();
     rclcpp::spin_some(self_);
     if (new_laser_corner_ && new_laser_surf_ && new_laser_outlier_ && new_laser_odom_ && std::abs(time_laser_odom_ - time_laser_corner_) < 0.005 && std::abs(time_laser_odom_ - time_laser_surf_) < 0.005 && std::abs(time_laser_odom_ - time_laser_outlier_) < 0.005)
